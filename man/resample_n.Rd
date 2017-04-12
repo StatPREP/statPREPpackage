@@ -4,7 +4,12 @@
 \alias{resample_n}
 \title{Resample in the dplyr style}
 \usage{
-resample_n(tbl, size = NULL, weight = NULL, .env = parent.frame())
+resample_n(tbl, size = nrow(tbl), .env = parent.frame())
+}
+\arguments{
+\item{tbl}{a data table}
+
+\item{size}{optional}
 }
 \description{
 This is a simple wrapper on \code{dplyr::sample_n`` that sets}replace=TRUE`

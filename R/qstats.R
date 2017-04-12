@@ -1,15 +1,53 @@
 #' Calculate basic statistics on a quantitative variable
 #'
+#' @param formula indicating which variables are to be used. See details.
+#' @param data the data table containing the variables
+#' @param .level the confidence or coverage level (default: 0.95)
+#' @param .wide format the output in a nice way for human reading. The default
+#' is to output a tidy data table with one row for each of the groups
+#' defined by the categorical variables on the right side of the formula.
+#' @param ... the names of the statistics desired. Default: the favorite
+#' statistics from `fav_stats()` in the mosaic package.
+#'
+#' @details
+#' One sided formula if there is only one quantitative variable involved
+#' or a two-sided formula with the quantitative variable on the left
+#' and categorical variables on the right.
+#'
+#' Available statistics
+#' min, Q1, median, mean, Q3, max, sd, n, missing
+#' The following will generate two statistics: the high and low
+#' of the corresponding interval
+#' coverage, mean.conf, median.conf, sd.conf
+#' For these, you may want to change the `.level`
 #' @export
 qstats <- function(formula, data, ..., .level = 0.95, .wide = FALSE) {
   stopifnot(.level <= 1, .level >= 0)
   others <- lazyeval::lazy_dots(...)
+  replace <- function(set, what, a, b) {
+    if (what %in% set) {
+      inds <- 1:length(set)
+      n <- which(what == set)
+      left <- set[inds < n]
+      middle <- c(a, b)
+      right <- set[inds > n]
+
+      return(c(left, middle, right))
+    }
+    return(set)
+  }
   others_names <-
     if (length(others) == 0) { # default set of stats
       c("min", "Q1", "median", "Q3", "max", "mean", "sd", "n", "missing")
     } else { # stats specified in ...
       unlist(lapply(others, FUN = function(x) as.character(x$expr)))
     }
+  # allow appreviation for intervals
+  others_names <- replace(others_names, "coverage", "coverage.low", "coverage.high")
+  others_names <- replace(others_names, "mean.conf", "mean.conf.low", "mean.conf.high")
+  others_names <- replace(others_names, "median.conf", "median.conf.low", "median.conf.high")
+  others_names <- replace(others_names, "sd.conf", "sd.conf.low", "sd.conf.high")
+
 
   if (inherits(formula, "data.frame") && inherits(data, "formula")) {
     # switched at birth. Likely because input is piped in
@@ -39,7 +77,9 @@ qstats <- function(formula, data, ..., .level = 0.95, .wide = FALSE) {
     median.conf.high = "statPREP:::ci_median(__data__, level = __level__, upper = TRUE)",
     sd.conf.low = "statPREP:::ci_sd(__data__, level = __level__, upper = FALSE)",
     sd.conf.high = "statPREP:::ci_sd(__data__, level = __level__, upper = TRUE)",
-    mean.stderr = "statPREP:::stderr_mean(__data__)"
+    mean.stderr = "statPREP:::stderr_mean(__data__)",
+    coverage.low = "stats::quantile(__data__, (1-__level__)/2)",
+    coverage.high = "stats::quantile(__data__, 1-(1-__level__)/2)"
   )
 
   # Fill in the variables and other params of the statistics.

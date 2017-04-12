@@ -6,6 +6,32 @@
 \usage{
 qstats(formula, data, ..., .level = 0.95, .wide = FALSE)
 }
+\arguments{
+\item{formula}{indicating which variables are to be used. See details.}
+
+\item{data}{the data table containing the variables}
+
+\item{...}{the names of the statistics desired. Default: the favorite
+statistics from \code{fav_stats()} in the mosaic package.}
+
+\item{.level}{the confidence or coverage level (default: 0.95)}
+
+\item{.wide}{format the output in a nice way for human reading. The default
+is to output a tidy data table with one row for each of the groups
+defined by the categorical variables on the right side of the formula.}
+}
 \description{
 Calculate basic statistics on a quantitative variable
+}
+\details{
+One sided formula if there is only one quantitative variable involved
+or a two-sided formula with the quantitative variable on the left
+and categorical variables on the right.
+
+Available statistics
+min, Q1, median, mean, Q3, max, sd, n, missing
+The following will generate two statistics: the high and low
+of the corresponding interval
+coverage, mean.conf, median.conf, sd.conf
+For these, you may want to change the \code{.level}
 }
