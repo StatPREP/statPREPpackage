@@ -6,6 +6,10 @@
 \usage{
 counts(formula, data, ..., tidy = FALSE)
 }
+\arguments{
+\item{level}{set to, e.g. 0.95 for the confidence intervals
+to be generated.}
+}
 \description{
 Counts and proportions
 }
