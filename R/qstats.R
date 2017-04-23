@@ -78,8 +78,8 @@ qstats <- function(formula, data, ..., .level = 0.95, .wide = FALSE) {
     sd.conf.low = "statPREP:::ci_sd(__data__, level = __level__, upper = FALSE)",
     sd.conf.high = "statPREP:::ci_sd(__data__, level = __level__, upper = TRUE)",
     mean.stderr = "statPREP:::stderr_mean(__data__)",
-    coverage.low = "stats::quantile(__data__, (1-__level__)/2)",
-    coverage.high = "stats::quantile(__data__, 1-(1-__level__)/2)"
+    coverage.low = "stats::quantile(__data__, probs = (1-__level__)/2, na.rm = TRUE)",
+    coverage.high = "stats::quantile(__data__, probs = 1-(1-__level__)/2, na.rm = TRUE)"
   )
 
   # Fill in the variables and other params of the statistics.
@@ -100,7 +100,6 @@ qstats <- function(formula, data, ..., .level = 0.95, .wide = FALSE) {
 
   # To do ... check for quantitative grouping variables with many, many levels
   # give a warning with advice to use ntiles() on such variables
-
   do.call(dplyr::group_by_, c(list(MF), as.list(var_names[-1]))) -> TMP
   dplyr::ungroup(do.call(dplyr::summarise_, c(list(TMP), as.list(to_do))))
 }
