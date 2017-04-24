@@ -31,7 +31,7 @@ test_that("1-way anova works", {
 })
 
 t4 <- mtcars %>% htest(~ cyl == 4)
-test_that("test of proportion works (as t-test)" {
+test_that("test of proportion works (as t-test)", {
   expect_equal(t4$estimate, 0.34375, tolerance = 0.0002)
   expect_equal(t4$statistic, 4.029652, tolerance = 0.0002 )
   expect_equal(t4$p.value, 0.0003363794, tolerance = 0.0002)
@@ -46,4 +46,8 @@ test_that("test of proportion works with dpyr", {
   t6 <- mtcars %>% mutate(cyl = (cyl==4) + 0) %>% htest( ~ cyl)
   expect_equal(t4, t5)
   expect_equal(t4, t6)
-  })
+})
+
+test_that("Can put simple arithmetic on the right-hand side of a formula", {
+  t7 <- htest(~ age - 36, data = CPS85) %>% digits(3)
+})
