@@ -28,7 +28,7 @@ htest <- function(formula, data, ...,
   if ( ! inherits(data, "data.frame")) stop("second arg must be a data table")
   data <- model.frame(formula, data)
   if (test == "t") {
-    if (! inherits(data[[1]], c("numeric", "logical", "AsIs")))
+    if (! inherits(data[[1]], c("integer", "numeric", "logical", "AsIs")))
       stop("You've given a categorical variable to the t-test. Either convert it to numerical or, perhaps, use a chi-squared type test.")
     if (length(all.vars(mosaic::rhs(formula))) > 1)
       stop("in t-test there can be only one variable on the RHS of the formula.")
