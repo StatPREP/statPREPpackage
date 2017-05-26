@@ -1,13 +1,13 @@
 Package: statPREP
 Type: Package
 Title: Calculations to support the statPREP tutorials
-Version: 0.1.0
+Version: 0.2.0
 Author: Daniel Kaplan
 Maintainer: Daniel Kaplan <kaplan@macalester.edu>
 Description: Mainly extensions to mosaic so that it plays well with the tidyverse.
 License: MIT + file LICENSE
 Depends: R (>= 3.3), tidyverse
-Imports: mosaic, lazyeval, dplyr, tidyr
+Imports: lazyeval, mosaic
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
