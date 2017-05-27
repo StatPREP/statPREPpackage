@@ -1,0 +1,11 @@
+# The AMES housing data
+
+The [article describing the data](https://ww2.amstat.org/publications/jse/v19n3/decock.pdf)
+
+Downloaded XLS file from [here](http://www.amstat.org/publications/jse/v19n3/decock/AmesHousing.xls) and put in `"/Users/kaplan/Downloads/AmesHousing.xls"`
+
+```{r}
+file_name <- "/Users/kaplan/Downloads/AmesHousing.xls"
+Ames_houses <- readxl::read_excel(file_name)
+save(Ames_houses, file = "../../data/Ames_houses.rda")
+```

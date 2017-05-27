@@ -1,0 +1,90 @@
+# Reformatting the College Scorecard data
+
+```{r setup, include = FALSE}
+library(dplyr)
+library(ggplot2)
+library(ggformula)
+```
+
+The Scorecard data are available at [this website](https://collegescorecard.ed.gov/data/). Documentation [here](https://collegescorecard.ed.gov/data/documentation/).
+
+For the present, I'm using the data I downloaded when originally writing the activity.
+
+```r
+download.file("http://tiny.cc/dcf/ScorecardSmall.Rda", 
+              destfile = "ScorecardSmall.Rda")
+```
+
+The subset includes all 7804 institutions in the original 2013 Scorecard file, but just 54 variables.
+
+The purpose of this document is to reform the data with nicer variable names and a better naming convention for the financial variables that I care about.
+
+```{r}
+load("ScorecardSmall.Rda")
+names(ScorecardSmall)
+table(ScorecardSmall$CONTROL)
+```
+
+Renaming variables:
+```{r}
+Scorecard_small <- ScorecardSmall %>%
+  rename(carnegie = CCSIZSET,
+         net_tuit_fte = TUITFTE,
+         control = CONTROL,
+         fac_sal = AVGFACSAL,
+         tuition_in = TUITIONFEE_IN,
+         tuition_out = TUITIONFEE_OUT,
+         rel_affil = RELAFFIL,
+         name = INSTNM,
+         id = OPEID,
+         adm_rate = ADM_RATE,
+         low_income = INC_PCT_LO,
+         parent_hs = PAR_ED_PCT_HS,
+         parent_ms = PAR_ED_PCT_MS,
+         parent_post = PAR_ED_PCT_PS,
+         first_gen = PAR_ED_PCT_1STGEN,
+         median_debt = GRAD_DEBT_MDN_SUPP,
+         spend_fte = INEXPFTE) %>%
+  mutate(control = c("public", "private", "other")[control]) %>%
+  mutate(net_price = ifelse(is.na(NPT4_PUB), NPT4_PRIV, NPT4_PUB)) %>%
+  mutate(net_price_q1 = ifelse(is.na(NPT41_PUB), NPT41_PRIV, NPT41_PUB)) %>%
+  mutate(net_price_q2 = ifelse(is.na(NPT42_PUB), NPT42_PRIV, NPT42_PUB)) %>%
+  mutate(net_price_q3 = ifelse(is.na(NPT43_PUB), NPT43_PRIV, NPT43_PUB)) %>%
+  mutate(net_price_q4 = ifelse(is.na(NPT44_PUB), NPT44_PRIV, NPT44_PUB)) %>%
+  mutate(net_price_q5 = ifelse(is.na(NPT45_PUB), NPT45_PRIV, NPT45_PUB)) %>%
+  mutate(net_price_3075 = mean(na.rm = TRUE, c(NPT4_3075_PRIV, NPT4_3075_PUB, NPT4_3075_OTHER))) %>%
+  mutate(net_price_75UP = round(mean(na.rm = TRUE, c(NPT4_75UP_PRIV, NPT4_75UP_PUB, NPT4_75UP_OTHER)))) %>%
+  mutate(net_price_048 = round(mean(na.rm = TRUE, c(NPT4_048_PRIV, NPT4_048_PUB, NPT4_048_OTHER)))) %>%
+  mutate(ret_ft = round(mean(na.rm = TRUE, c(RET_FT4, RET_FTL4)))) %>%
+  mutate(ret_ft = round(mean(na.rm = TRUE, c(RET_PT4, RET_PTL4)))) %>%
+  mutate(  adm_rate = round(100 * as.numeric(adm_rate))
+         , first_gen = round(100 * as.numeric(first_gen))
+         , parent_ms = round(100 * as.numeric(parent_ms))
+         , parent_hs = round(100 * as.numeric(parent_hs))
+         , parent_post = round(100 * as.numeric(parent_post))
+         , low_income = round(100 * as.numeric(low_income))
+         , median_debt = as.numeric(median_debt)
+         ) %>%
+  
+  select(-starts_with("NPT4"), -starts_with("RET_"), -CCUGPROF)
+  
+names(Scorecard_small)
+# save(Scorecard_small, file = "../data/Scorecard_small.rda")
+```
+
+## Merging the public and private data
+
+```{r}
+ScorecardSmall %>%
+  group_by(is.na(RET_PT4), is.na(RET_PTL4)) %>%
+  tally()
+ScorecardSmall %>%
+  filter(is.na(NPT4_PUB), is.na(NPT4_PRIV))  -> foo
+nrow(foo)
+```
+
+
+## Auxilliary Data
+
+* The `Carnegie.csv` file details the 18 [Carnegie size classifications](http://carnegieclassifications.iu.edu/classification_descriptions/size_setting.php).
+

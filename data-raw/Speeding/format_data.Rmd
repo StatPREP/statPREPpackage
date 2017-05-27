@@ -1,0 +1,17 @@
+# tickets versus warnings in the Maryland Speeding data.
+
+```{r}
+library(tidyverse)
+```
+
+In 1998, the Attorney general of Maryland asked for advice on whether there is a racial pattern in the issuance of tickets and warnings for drivers stopped for speeding. Several years before, the Maryland state police had agreed to provide detailed records of all highway stops and searches. These records are for interstate highway I-95 North. These data should not be regarded as representative of other highways, even for I-95 South south, since I95-North is a major route for smuggling drugs from the south-eastern US to the highly urbanized northeast.
+
+Time is in hours after mid-night. For instance, a time of 10.5 corresponds to 10:30am, while 16.75 is 4:45pm.
+
+```{r}
+Speeding <- read.csv("Maryland_speeding.csv") %>%
+  mutate(modelyear = 1900 + modelyear,
+         time = (time %/% 100) + (time %% 100) / 60
+         )
+save(Speeding, file = "../../data/Speeding.rda")
+```

@@ -1,0 +1,46 @@
+# Creating Births_per_day
+
+```{r}
+require(mosaicData)
+require(tidyverse)
+```
+
+
+## Births per day
+
+```{r}
+data(Birthdays, package = "mosaicData")
+Births_per_day <- 
+  Birthdays %>% 
+  group_by(date) %>%
+  summarize(nbirths = sum(births)) %>%
+  mutate(date = as.Date(date))
+save(Births_per_day, file = "../../data/Births_per_day.rda")
+```
+
+## Holidays
+
+```{r}
+US_Holidays <- readr::read_csv("http://tiny.cc/dcf/US-Holidays.csv") %>% select(-year)
+```
+
+Get more Holidays from <https://gist.github.com/shivaas/4758439>
+
+```{r}
+More_holidays <- readr::read_csv("https://gist.githubusercontent.com/shivaas/4758439/raw/b0d3ddec380af69930d0d67a9e0519c047047ff8/US%2520Bank%2520holidays", col_names = FALSE)
+names(More_holidays) <- c("index", "date", "holiday")
+More_holidays <-
+  More_holidays %>% select(-index)
+```
+
+```{r}
+both <- US_Holidays %>% 
+  mutate(date = lubridate::dmy(date)) %>% 
+  bind_rows(More_holidays) %>%
+  filter( !duplicated(date))
+US_Holidays <- both
+```
+
+```{r}
+save(US_Holidays, file = "../../data/US_Holidays.rda")
+```

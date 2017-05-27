@@ -1,0 +1,17 @@
+# Scottish Hill Race data
+
+```{r include = FALSE}
+library(tidyverse)
+```
+
+These data come from Jessica Utts. They are mentioned in the GAISE 2016 College report.
+
+The times are for the fastest runner in each race.
+
+```{r}
+Hillrace <- readr::read_csv("fastest_runner.csv")
+Hillrace <- 
+  Hillrace %>% 
+  gather(key = sex, value = time, male, female)
+save(Hillrace, file = "../../data/Hillrace.rda")
+```
