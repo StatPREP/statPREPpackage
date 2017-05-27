@@ -7,7 +7,7 @@ Maintainer: Daniel Kaplan <kaplan@macalester.edu>
 Description: Mainly extensions to mosaic so that it plays well with the tidyverse.
 License: MIT + file LICENSE
 Depends: R (>= 3.3), tidyverse
-Imports: lazyeval, mosaic
+Imports: lazyeval, mosaic, statisticalModeling
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
