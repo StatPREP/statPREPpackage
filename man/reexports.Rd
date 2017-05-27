@@ -4,6 +4,10 @@
 \name{reexports}
 \alias{reexports}
 \alias{do}
+\alias{reexports}
+\alias{ntiles}
+\alias{reexports}
+\alias{gmodel}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -11,6 +15,8 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{mosaic}{\code{\link[mosaic]{do}}}
+  \item{mosaic}{\code{\link[mosaic]{do}}, \code{\link[mosaic]{ntiles}}}
+
+  \item{statisticalModeling}{\code{\link[statisticalModeling]{gmodel}}}
 }}
 
