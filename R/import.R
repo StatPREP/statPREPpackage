@@ -9,4 +9,3 @@ mosaic::ntiles
 #' @importFrom statisticalModeling gmodel
 #' @export
 statisticalModeling::gmodel
-

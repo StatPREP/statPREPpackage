@@ -1,5 +1,9 @@
 #' Calculate basic statistics on a quantitative variable
 #'
+#' Does a tidy calculation of basic stats. "Tidy" means that `qstats()` takes a
+#' data table as input and produces a data table as output. The output will have one column
+#' for each of the statistics requested as well as columns for any grouping variables.
+#'
 #' @param formula indicating which variables are to be used. See details.
 #' @param data the data table containing the variables
 #' @param .level the confidence or coverage level (default: 0.95)
@@ -10,16 +14,28 @@
 #' statistics from `fav_stats()` in the mosaic package.
 #'
 #' @details
-#' One sided formula if there is only one quantitative variable involved
+#' Use a one-sided formula if there is only one quantitative variable involved
 #' or a two-sided formula with the quantitative variable on the left
-#' and categorical variables on the right.
+#' and categorical variables on the right. Note that `qstats()` uses only the formula to define
+#' splitting into groups and ignores any grouping imposed by `dplyr::group_by()`.
+#' It is unlike `dplyr::summarise()` in that respect.  QUESTION: Should this be configured to work
+#' both with `group_by()` and the formula, using all the variables mentioned.
 #'
-#' Available statistics
-#' min, Q1, median, mean, Q3, max, sd, n, missing
-#' The following will generate two statistics: the high and low
-#' of the corresponding interval
-#' coverage, mean.conf, median.conf, sd.conf
-#' For these, you may want to change the `.level`
+#' Available statistics:
+#' * `min`, `Q1`, `median`, `mean`, `Q3`, `max`, `sd`, `n`, `missing`. When no specific statistics are named, these will be the output.
+#' * Intervals giving the high and low values:
+#'     - `coverage`: covers the central 95% of the data
+#'     - `mean.conf`: confidence interval on the mean
+#'     - `median.conf`: confidence interval on the median
+#'     - `sd.conf`: confidence interval on the standard deviation
+#'  * Just one end of the interval, use a name like `sd.conf.low`
+#'
+#' @examples
+#' mtcars %>% qstats( ~ hp, mean, median, sd.conf)
+#' mtcars %>% qstats(hp ~ cyl, mean, median, sd.conf)
+#' mtcars %>% qstats(hp ~ cyl)
+#'
+#'
 #' @export
 qstats <- function(formula, data, ..., .level = 0.95, .wide = FALSE) {
   stopifnot(.level <= 1, .level >= 0)
