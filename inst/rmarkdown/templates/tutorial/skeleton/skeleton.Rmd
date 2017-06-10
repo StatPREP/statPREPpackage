@@ -1,0 +1,84 @@
+---
+title: "Put Your Tutorial Title Here"
+output: 
+  learnr::tutorial:
+    progressive: TRUE
+runtime: shiny_prerendered
+---
+
+```{r setup, include=FALSE}
+library(learnr)     # the tutorial package
+library(statPREP)   # some things Danny put together for StatPREP
+library(tibble)     # for dealing with tibble data
+library(ggformula)  # all those gf_functions live hear
+library(mosaicData) # mosaic data sets
+library(mosaic)     # Project MOSAIC tools 
+theme_set(theme_bw())   # get rid of the gray background in the plots
+# A few options for how R stuff is displayed
+knitr::opts_chunk$set(
+  echo = TRUE,                      # show R code in non-exercise chunks
+  fig.align = "center",             # center plots on the page
+  fig.width = 6, fig.height = 2.5   # default figure size
+  )
+```
+
+## Topics
+
+2nd level headers (`##`) introduce the titles of the topics.  Be sure to leave a space after `##`.
+
+You can type any text you like.  If you want to emaphsize something, you can use **bold** or *italics*.
+
+To find out about all the markup options, see the 
+[R Markdown Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)
+that RStudio provides or the Markdown.Quick Reference in the Help menu.
+
+## Exercises
+
+### A Basic Exercise
+
+To create an exercise, add `exercise = TRUE` to the chunk header.  Make sure the chunk
+has a label. (Here we use `example-exercise` for the label.)
+
+```{r, example-exercise, exercise = TRUE}
+gf_point(height ~ mother, data = Galton)
+```
+
+### An Auto-Evaluated Exercise
+
+This code will be run without the user having to click on "Run Code".
+Note the each exercise must have a unique label.
+
+```{r, autoeval-exercise, exercise = TRUE, exercise.eval = TRUE}
+gf_point(height ~ mother, data = Galton)
+```
+
+### Exercise Hints
+
+Replace `goal` with one of the plotting functions.
+
+```{r, exercise3, exercise = TRUE}
+goal(height ~ mother, data = Galton)
+```
+
+<div id="exercise3-hint">
+Here are some possible choices: `gf_point()`, `gf_line()`, `gf_smooth()`, `gf_spline()`,
+`gf_lm()`.  Remeber, you can overlay more than one layer if you use `%>%` between layers.
+</div>
+
+## Next Topic
+
+### Sub-topic 1
+
+This is sub-topic 1.
+
+#### Fourth level header
+
+More stuff can go here.
+
+### Sub-topic 2
+
+This is sub-topic 2.
+
+#### Another Fourth level header
+
+That's all there is to this.
