@@ -4,6 +4,11 @@
 
 #' @export
 counts <- function(formula, data, ..., tidy = FALSE) {
+  if (inherits(formula, "data.frame") && inherits(data, "formula")) {
+    Tmp <- data
+    data <- formula
+    formula <- Tmp
+  }
   Tmp <- mosaic::tally(formula, data, ...)
   if (tidy) Tmp <- as.data.frame(Tmp)
 
