@@ -1,0 +1,10 @@
+## The College grade data
+
+```{r}
+Grades <- readr::read_csv("http://tiny.cc/mosaic/grades.csv")
+Courses <- readr::read_csv("http://tiny.cc/mosaic/courses.csv")
+Grade_to_number <- readr::read_csv("http://tiny.cc/mosaic/grade-to-number.csv")
+save(Grades, file = "../../data/Grades.rda")
+save(Courses, file = "../../data/Courses.rda")
+save(Grade_to_number, file = "../../data/Grade_to_number.rda")
+```

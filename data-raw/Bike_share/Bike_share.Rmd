@@ -1,0 +1,9 @@
+# The bicycle rental data
+
+```{r}
+data_site <-
+  "http://tiny.cc/dcf/2014-Q4-Trips-History-Data-Small.rds"
+Trips <- readRDS(gzcon(url(data_site)))
+Bike_trips <- Trips
+save(Bike_trips, file = "../../data/Bike_trips.rda")
+```

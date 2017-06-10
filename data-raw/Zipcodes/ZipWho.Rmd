@@ -1,0 +1,48 @@
+# Get Zip-by-zip demographic data
+
+Scrape zipcode data from zipwho.com
+
+```{r}
+library(RCurl)
+library(tidyverse)
+library(stringr)
+```
+
+Get a comprehensive list of zip codes
+```{r}
+Zips <- read_csv("us_postal_codes.csv")
+code_list <- Zips$`Postal Code`
+```
+
+```{r}
+get_zip_data <- function(zip) {
+
+  result <- list()
+  for (k in 1:length(zip)) {
+    query <- "http://zipwho.com/?zip=%s&city=&filters=--_--_--_--&state=&mode=zip"
+    query <-  sprintf(query, zip[k])
+    myfile <- getURL(query, ssl.verifyhost=FALSE, ssl.verifypeer=FALSE)
+    foo <- gsub('"', "", str_extract(myfile, 'zip,city,state.*;'))
+    foo <- gsub("\\\\n", "\n", foo)
+    foo <- gsub(";", "", foo)
+    Sys.sleep(.1)
+    result[k] <- foo
+  }
+  result
+}
+```
+
+```{r}
+Zip_data <- NULL
+k <- 5000
+step <- 5
+while(k < length(code_list)) {
+  zips <- code_list[k:(k+step-1)]
+  k <- k + step
+  raw <- get_zip_data(zips)
+  This_set <- bind_rows(lapply(raw, function(x) read.csv(text = x, stringsAsFactors = FALSE)))
+  if (is.null(Zip_data)) Zip_data <- This_set
+  else Zip_data <- bind_rows(Zip_data, This_set)
+  save(Zip_data, file = sprintf("Zip_data_%d.rda", k))
+}
+```

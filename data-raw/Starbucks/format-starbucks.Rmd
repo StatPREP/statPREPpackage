@@ -1,0 +1,13 @@
+# Formatting the Starbucks data
+
+```{r include = FALSE}
+library(tidyverse)
+```
+
+```{r}
+Starbucks <- readr::read_csv("starbucks.csv")
+Starbucks %<>% 
+  rename(long = Longitude, lat = Latitude, postcode = Postcode, ownership = `Ownership Type`, country = Country, state = `State/Province`, city = City) %>%
+  select(long, lat, postcode, ownership, country, state, city)
+# save(Starbucks, file = "../../data/Starbucks.rda")
+```
