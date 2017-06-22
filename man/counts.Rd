@@ -4,7 +4,7 @@
 \alias{counts}
 \title{Counts and proportions}
 \usage{
-counts(formula, data, ..., tidy = TRUE)
+counts(formula, data, ..., tidy = FALSE)
 }
 \arguments{
 \item{level}{set to, e.g. 0.95 for the confidence intervals
