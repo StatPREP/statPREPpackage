@@ -1,0 +1,28 @@
+---
+title: "Format Cherry Blossom longitudinal data"
+author: "Daniel Kaplan"
+date: "June 22, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+These data were scrapped a long time ago by Danny Kaplan and used as the basis for [this chapter](http://www.crcnetbase.com/doi/abs/10.1201/b18325-4) *Data Science in R: A Case Studies Approach to Computational Reasoning and Problem Solving*, editors Deborah Nolan and Duncan Temple Lang, Chapman and Hall/CRC 2015, Pages 45–103
+
+More data is now available from the Cherry Blossom web site. We need a volunteer to scrape it.
+
+```{r}
+Cherry_race_longitudinal <- read_csv("Cherry-Blossom-Longitudinal.csv")
+Runner_ID <- Cherry_race_longitudinal %>% 
+  group_by(name.yob) %>%
+  summarise(dummy = NA) %>% # just grab the grouping variable
+  mutate(ID = paste0("R", row_number())) %>%
+  select( - dummy)
+Cherry_race_longitudinal <- 
+  Cherry_race_longitudinal %>%
+  left_join(Runner_ID) %>%
+  select(-name.yob)
+save(Cherry_race_longitudinal, file = "../../data/Cherry_race_longitudinal.rda")
+```

@@ -1,0 +1,24 @@
+---
+title: "Minnesota Home"
+author: "Daniel Kaplan"
+date: "June 22, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+These data are transcribed from the monthly utility statements over 18 years (and counting!) for a home in Saint Paul, Minnesota, USA. 
+
+```{r}
+months <- c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
+tmp <- read_csv("data-raw/Utilities/utilities-up-to-date.csv")
+tmp$month <- factor(months[tmp$month], levels = months)
+```
+
+```{r}
+MN_home <- tmp
+save(MN_home, file = "../../data/MN_home.rda")
+```

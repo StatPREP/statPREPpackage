@@ -3,7 +3,7 @@
 #' to be generated.
 
 #' @export
-counts <- function(formula, data, ..., tidy = FALSE) {
+counts <- function(formula, data, ..., tidy = TRUE) {
   Tmp <- mosaic::tally(formula, data, ...)
   if (tidy) Tmp <- as.data.frame(Tmp)
 
@@ -11,7 +11,7 @@ counts <- function(formula, data, ..., tidy = FALSE) {
 }
 
 #' @export
-props <- function(formula, data, as.percent = FALSE, level = NULL, ..., tidy = FALSE) {
+props <- function(formula, data, as.percent = FALSE, level = NULL, ..., tidy = TRUE) {
   fmt <- ifelse(as.percent, "percent", "proportion")
   Tmp <- mosaic::tally(formula, data, format = fmt, ...)
   Tmp <- as.data.frame(Tmp)

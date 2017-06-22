@@ -49,7 +49,7 @@ htest <- function(formula, data, ...,
     res$method <- NULL
     res$alternative <- NULL
     return(res)
-  } else if (test %in% c("chisq", "goodness", "independence") ) {
+  } else if (test %in% c("chisq", "goodness") ) {
     res <- counts(formula, data)
     if (is.null(prob_model)) {
       res <- broom::tidy(chisq.test(res))
@@ -63,7 +63,7 @@ htest <- function(formula, data, ...,
     }
     res$method <- NULL
     return(res)
-  } else if (test == "exact") {
+  } else if (test %in% c("exact", "independence")) {
     res <- counts(formula, data)
     res <- broom::tidy(fisher.test(res))
     res$method <- NULL

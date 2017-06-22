@@ -1,0 +1,35 @@
+---
+title: "Formatting the Taxi Trips data"
+author: "Daniel Kaplan"
+date: "June 22, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(lubridate)
+```
+
+`Taxi_trips` (from the `statPREP` package) is a subset of a much larger data set from the New York City [Taxi and Limosine Commission](http://www.nyc.gov/html/tlc/html/passenger/taxicab_rate.shtml) about taxicab trips in New York City. 
+
+The unit of observation is a single trip by taxi. The recorded variables are `pickup` and `dropoff` date-times, `distance` of the trip (in miles), the `fare` amount (in dollars), and the number of `passengers`.  From these have been derived the `duration` of the trip (in minutes), the `hour_of_day` of the start of the trip (with, e.g. 16.5 meaning 4:30pm), and the `day_of_week` of the trip. Also added is the `fare_distance`, which is the `distance` rounded up to the nearest 5th of a mile.
+
+Some possible questions:
+
+- How much slower is a trip during rush hour than during the off hours?
+- Can you determine what the rush hours are from the data?
+- Are the fares being determined according to the official policy stated at the [Taxi and Limosine Commission](http://www.nyc.gov/html/tlc/html/passenger/taxicab_rate.shtml)?
+
+
+```{r}
+load("Taxi_trips.rda")
+names(Taxi_trips) <- c("distance", "fare", "passengers", "pickup", "dropoff")
+Taxi_trips <- Taxi_trips %>%
+  mutate(duration = as.numeric(dropoff - pickup) /60,
+         day_of_week = lubridate::wday(pickup, label = TRUE),
+         hour_of_day = lubridate::hour(pickup) + 
+           lubridate::minute(pickup) / 60,
+         fare_distance = ceiling(distance * 5) / 5)
+save(Taxi_trips, file = "../../data/Taxi_trips.rda")
+```
